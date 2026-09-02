@@ -1,0 +1,15 @@
+gooo 1
+kind rules
+
+rule R01 domain=dependency operation=transitive_dependents condition=changed_or_unknown outcome=select_dependents
+rule R02 domain=dependency operation=unknown_frontier condition=unknown_dependency outcome=preserve_unknown
+rule R03 domain=invalidation operation=semantic_change condition=digest_or_graph_changed outcome=invalidate_lock
+rule R04 domain=invalidation operation=authority_change condition=authority_digest_changed outcome=invalidate_lock
+rule R05 domain=invalidation operation=environment_scope condition=toolchain_or_evaluator_changed outcome=invalidate_lock
+rule R06 domain=reuse operation=closed_exact_scope condition=closed_scope_and_provenance outcome=reuse_lock
+rule R07 domain=reuse operation=provenance condition=missing_provenance outcome=unknown_frontier
+rule R08 domain=precedence operation=status condition=refuted_over_unknown_over_closed outcome=highest_status
+rule R09 domain=execution operation=selection_only condition=planner_never_executes outcome=executed_checks_zero
+rule R10 domain=performance operation=measurement condition=no_exact_before_after_pair outcome=unknown
+rule R11 domain=runtime operation=filesystem condition=planner_stdout_only outcome=repository_writes_zero
+rule R12 domain=authority operation=unknown condition=unknown_authority outcome=widen_unknown

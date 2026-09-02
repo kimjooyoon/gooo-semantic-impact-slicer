@@ -1,0 +1,29 @@
+{
+  "request": {
+    "scenario": "stale-evaluator",
+    "previous": {
+      "toolchain": "go1.27.1",
+      "evaluator": "eval-1",
+      "nodes": [{"id":"evaluator-node","digest":"e1","deps":[],"authority":"auth","provenance":"prov-evaluator","indicator":"REGRESSION"}],
+      "locks": [{"id":"lock-evaluator","node_id":"evaluator-node","check_id":"check-evaluator","status":"CLOSED","evidence_digest":"ev-evaluator","toolchain":"go1.27.1","evaluator":"eval-1","authority":"auth","provenance":"prov-evaluator"}]
+    },
+    "candidate": {
+      "toolchain": "go1.27.1",
+      "evaluator": "eval-2",
+      "nodes": [{"id":"evaluator-node","digest":"e1","deps":[],"authority":"auth","provenance":"prov-evaluator","indicator":"REGRESSION"}],
+      "checks": [{"id":"check-evaluator","node_id":"evaluator-node","cell_id":"C07","indicator":"REGRESSION"}]
+    }
+  },
+  "expected": {
+    "semantic_nodes": 1,
+    "changed_nodes": [],
+    "impacted_nodes": ["evaluator-node"],
+    "selected_checks": ["check-evaluator"],
+    "reusable_locks": [],
+    "invalidated_locks": ["lock-evaluator"],
+    "unresolved_nodes": ["evaluator-node"],
+    "executed_checks": 0,
+    "generated_artifacts": 1,
+    "statuses": {"evaluator-node":"UNKNOWN"}
+  }
+}

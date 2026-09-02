@@ -1,0 +1,15 @@
+gooo 1
+kind conformance
+
+cell C01 category=FOUNDATION scenario=disjoint-change focus=changed_nodes
+cell C02 category=FOUNDATION scenario=transitive-change focus=transitive_dependents
+cell C03 category=FOUNDATION scenario=shared-dependency focus=shared_dependents
+cell C04 category=FOUNDATION scenario=dependency-cycle focus=cycle_termination
+cell C05 category=COHERENCE scenario=missing-provenance focus=unknown_frontier
+cell C06 category=COHERENCE scenario=stale-toolchain focus=scope_invalidation
+cell C07 category=COHERENCE scenario=stale-evaluator focus=scope_invalidation
+cell C08 category=COHERENCE scenario=changed-authority focus=authority_invalidation
+cell C09 category=REGRESSION scenario=conflicting-lock focus=conflict_unknown
+cell C10 category=REGRESSION scenario=no-op-candidate focus=reuse_all
+cell C11 category=REGRESSION scenario=unknown-dependency focus=unknown_dependents
+cell C12 category=REGRESSION scenario=refuted-precedence focus=status_precedence

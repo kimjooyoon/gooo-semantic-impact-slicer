@@ -1,0 +1,41 @@
+{
+  "request": {
+    "scenario": "disjoint-change",
+    "previous": {
+      "toolchain": "go1.27.1",
+      "evaluator": "eval-1",
+      "nodes": [
+        {"id":"alpha","digest":"a1","deps":[],"authority":"auth-a","provenance":"prov-alpha","indicator":"FOUNDATION"},
+        {"id":"beta","digest":"b1","deps":[],"authority":"auth-b","provenance":"prov-beta","indicator":"COHERENCE"}
+      ],
+      "locks": [
+        {"id":"lock-alpha","node_id":"alpha","check_id":"check-alpha","status":"CLOSED","evidence_digest":"ev-alpha","toolchain":"go1.27.1","evaluator":"eval-1","authority":"auth-a","provenance":"prov-alpha"},
+        {"id":"lock-beta","node_id":"beta","check_id":"check-beta","status":"CLOSED","evidence_digest":"ev-beta","toolchain":"go1.27.1","evaluator":"eval-1","authority":"auth-b","provenance":"prov-beta"}
+      ]
+    },
+    "candidate": {
+      "toolchain": "go1.27.1",
+      "evaluator": "eval-1",
+      "nodes": [
+        {"id":"alpha","digest":"a2","deps":[],"authority":"auth-a","provenance":"prov-alpha","indicator":"FOUNDATION"},
+        {"id":"beta","digest":"b1","deps":[],"authority":"auth-b","provenance":"prov-beta","indicator":"COHERENCE"}
+      ],
+      "checks": [
+        {"id":"check-alpha","node_id":"alpha","cell_id":"C01","indicator":"FOUNDATION"},
+        {"id":"check-beta","node_id":"beta","cell_id":"C10","indicator":"COHERENCE"}
+      ]
+    }
+  },
+  "expected": {
+    "semantic_nodes": 2,
+    "changed_nodes": ["alpha"],
+    "impacted_nodes": ["alpha"],
+    "selected_checks": ["check-alpha"],
+    "reusable_locks": ["lock-beta"],
+    "invalidated_locks": ["lock-alpha"],
+    "unresolved_nodes": [],
+    "executed_checks": 0,
+    "generated_artifacts": 1,
+    "statuses": {"alpha":"CLOSED","beta":"CLOSED"}
+  }
+}

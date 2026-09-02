@@ -1,0 +1,45 @@
+{
+  "request": {
+    "scenario": "dependency-cycle",
+    "previous": {
+      "toolchain": "go1.27.1",
+      "evaluator": "eval-1",
+      "nodes": [
+        {"id":"cycle-a","digest":"a1","deps":["cycle-b"],"authority":"auth","provenance":"prov-a","indicator":"FOUNDATION"},
+        {"id":"cycle-b","digest":"b1","deps":["cycle-a"],"authority":"auth","provenance":"prov-b","indicator":"COHERENCE"},
+        {"id":"cycle-leaf","digest":"l1","deps":["cycle-a"],"authority":"auth","provenance":"prov-leaf","indicator":"REGRESSION"}
+      ],
+      "locks": [
+        {"id":"lock-cycle-a","node_id":"cycle-a","check_id":"check-cycle-a","status":"CLOSED","evidence_digest":"ev-a","toolchain":"go1.27.1","evaluator":"eval-1","authority":"auth","provenance":"prov-a"},
+        {"id":"lock-cycle-b","node_id":"cycle-b","check_id":"check-cycle-b","status":"CLOSED","evidence_digest":"ev-b","toolchain":"go1.27.1","evaluator":"eval-1","authority":"auth","provenance":"prov-b"},
+        {"id":"lock-cycle-leaf","node_id":"cycle-leaf","check_id":"check-cycle-leaf","status":"CLOSED","evidence_digest":"ev-leaf","toolchain":"go1.27.1","evaluator":"eval-1","authority":"auth","provenance":"prov-leaf"}
+      ]
+    },
+    "candidate": {
+      "toolchain": "go1.27.1",
+      "evaluator": "eval-1",
+      "nodes": [
+        {"id":"cycle-a","digest":"a2","deps":["cycle-b"],"authority":"auth","provenance":"prov-a","indicator":"FOUNDATION"},
+        {"id":"cycle-b","digest":"b1","deps":["cycle-a"],"authority":"auth","provenance":"prov-b","indicator":"COHERENCE"},
+        {"id":"cycle-leaf","digest":"l1","deps":["cycle-a"],"authority":"auth","provenance":"prov-leaf","indicator":"REGRESSION"}
+      ],
+      "checks": [
+        {"id":"check-cycle-a","node_id":"cycle-a","cell_id":"C04","indicator":"FOUNDATION"},
+        {"id":"check-cycle-b","node_id":"cycle-b","cell_id":"C04","indicator":"COHERENCE"},
+        {"id":"check-cycle-leaf","node_id":"cycle-leaf","cell_id":"C04","indicator":"REGRESSION"}
+      ]
+    }
+  },
+  "expected": {
+    "semantic_nodes": 3,
+    "changed_nodes": ["cycle-a"],
+    "impacted_nodes": ["cycle-a","cycle-b","cycle-leaf"],
+    "selected_checks": ["check-cycle-a","check-cycle-b","check-cycle-leaf"],
+    "reusable_locks": [],
+    "invalidated_locks": ["lock-cycle-a","lock-cycle-b","lock-cycle-leaf"],
+    "unresolved_nodes": [],
+    "executed_checks": 0,
+    "generated_artifacts": 1,
+    "statuses": {"cycle-a":"CLOSED","cycle-b":"CLOSED","cycle-leaf":"CLOSED"}
+  }
+}
