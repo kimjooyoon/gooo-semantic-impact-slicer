@@ -258,13 +258,13 @@ func writeJSON(value any) error {
 }
 
 type conformanceResult struct {
-	Mode             string              `json:"mode"`
-	FixtureCount     int                 `json:"fixture_count"`
-	Passed           int                 `json:"passed"`
-	Failed           int                 `json:"failed"`
-	CellsByCategory  map[string]int      `json:"cells_by_category"`
-	Vectors          []conformanceVector `json:"vectors"`
-	Errors           []string            `json:"errors,omitempty"`
+	Mode            string              `json:"mode"`
+	FixtureCount    int                 `json:"fixture_count"`
+	Passed          int                 `json:"passed"`
+	Failed          int                 `json:"failed"`
+	CellsByCategory map[string]int      `json:"cells_by_category"`
+	Vectors         []conformanceVector `json:"vectors"`
+	Errors          []string            `json:"errors,omitempty"`
 }
 
 type conformanceVector struct {
@@ -287,5 +287,5 @@ type replayVector struct {
 	Scenario        string `json:"scenario"`
 	ReportSHA256    string `json:"report_sha256"`
 	SelectedChecks  int    `json:"selected_checks"`
-	UnresolvedNodes  int    `json:"unresolved_nodes"`
+	UnresolvedNodes int    `json:"unresolved_nodes"`
 }

@@ -193,15 +193,15 @@ func Plan(req Request) (Report, error) {
 	operational := []OperationalRefutedEvent{}
 	if req.ReportedExecutedChecks > 0 {
 		operational = append(operational, OperationalRefutedEvent{
-			Code: "OPERATIONAL_REFUTED",
+			Code:   "OPERATIONAL_REFUTED",
 			Reason: "the input claims executed checks, but this selection-only planner cannot certify execution",
 		})
 	}
 
 	return Report{
-		SchemaVersion:      "1",
-		Scenario:           req.Scenario,
-		SelectionMode:      "selection-only",
+		SchemaVersion: "1",
+		Scenario:      req.Scenario,
+		SelectionMode: "selection-only",
 		Metrics: Metrics{
 			SemanticNodes:      len(req.Candidate.Nodes),
 			ChangedNodes:       len(changed),
@@ -212,24 +212,24 @@ func Plan(req Request) (Report, error) {
 			ExecutedChecks:     0,
 			GeneratedArtifacts: generated.GeneratedArtifactCount,
 		},
-		ChangedNodes:       changed,
-		ImpactedNodes:      impactedIDs,
-		SelectedChecks:     selectedChecks,
-		ReusableLocks:      reusable,
-		InvalidatedLocks:   invalidated,
-		Unresolved:         unresolved,
-		StatusByNode:       status,
-		IndicatorVectors:   indicators,
-		AuthorityCounters:  authorities,
+		ChangedNodes:      changed,
+		ImpactedNodes:     impactedIDs,
+		SelectedChecks:    selectedChecks,
+		ReusableLocks:     reusable,
+		InvalidatedLocks:  invalidated,
+		Unresolved:        unresolved,
+		StatusByNode:      status,
+		IndicatorVectors:  indicators,
+		AuthorityCounters: authorities,
 		Inventory: Inventory{
-			GoooFiles:                  generated.GoooFileCount,
-			ConformanceCells:           generated.ConformanceCellCount,
-			Activities:                 generated.ActivityCount,
-			RootReadmeExcluded:         generated.RootReadmeExcluded,
-			CrossProjectRequiredGates:  generated.CrossProjectRequiredGates,
-			LocalValidationCount:       0,
-			RuntimeRepositoryWrites:    0,
-			TempOutputScope:            "caller-owned",
+			GoooFiles:                 generated.GoooFileCount,
+			ConformanceCells:          generated.ConformanceCellCount,
+			Activities:                generated.ActivityCount,
+			RootReadmeExcluded:        generated.RootReadmeExcluded,
+			CrossProjectRequiredGates: generated.CrossProjectRequiredGates,
+			LocalValidationCount:      0,
+			RuntimeRepositoryWrites:   0,
+			TempOutputScope:           "caller-owned",
 		},
 		Execution: Execution{Mode: "selection-only", CacheHitsAreExecution: false},
 		Performance: Performance{

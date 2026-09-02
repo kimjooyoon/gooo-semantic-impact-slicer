@@ -17,10 +17,10 @@ const (
 // Request is a pinned graph/evidence-lock snapshot paired with a candidate.
 // The planner only selects work; it does not execute checks.
 type Request struct {
-	Scenario                  string   `json:"scenario"`
-	Previous                  Snapshot `json:"previous"`
-	Candidate                 Snapshot `json:"candidate"`
-	ReportedExecutedChecks    int      `json:"reported_executed_checks,omitempty"`
+	Scenario               string   `json:"scenario"`
+	Previous               Snapshot `json:"previous"`
+	Candidate              Snapshot `json:"candidate"`
+	ReportedExecutedChecks int      `json:"reported_executed_checks,omitempty"`
 }
 
 type Snapshot struct {
@@ -62,34 +62,34 @@ type EvidenceLock struct {
 }
 
 type Report struct {
-	SchemaVersion       string                      `json:"schema_version"`
-	Scenario            string                      `json:"scenario"`
-	SelectionMode       string                      `json:"selection_mode"`
-	Metrics             Metrics                     `json:"metrics"`
-	ChangedNodes        []string                    `json:"changed_nodes"`
-	ImpactedNodes       []string                    `json:"impacted_nodes"`
-	SelectedChecks      []string                    `json:"selected_checks"`
-	ReusableLocks       []string                    `json:"reusable_locks"`
-	InvalidatedLocks    []string                    `json:"invalidated_locks"`
-	Unresolved          []UnknownFrontier            `json:"unresolved"`
-	StatusByNode        map[string]string            `json:"status_by_node"`
-	IndicatorVectors    map[string]IndicatorVector  `json:"indicator_vectors"`
-	AuthorityCounters   AuthorityCounters            `json:"authority_counters"`
-	Inventory           Inventory                   `json:"inventory"`
-	Execution           Execution                   `json:"execution"`
-	Performance         Performance                 `json:"performance"`
-	OperationalRefuted  []OperationalRefutedEvent   `json:"operational_refuted"`
+	SchemaVersion      string                     `json:"schema_version"`
+	Scenario           string                     `json:"scenario"`
+	SelectionMode      string                     `json:"selection_mode"`
+	Metrics            Metrics                    `json:"metrics"`
+	ChangedNodes       []string                   `json:"changed_nodes"`
+	ImpactedNodes      []string                   `json:"impacted_nodes"`
+	SelectedChecks     []string                   `json:"selected_checks"`
+	ReusableLocks      []string                   `json:"reusable_locks"`
+	InvalidatedLocks   []string                   `json:"invalidated_locks"`
+	Unresolved         []UnknownFrontier          `json:"unresolved"`
+	StatusByNode       map[string]string          `json:"status_by_node"`
+	IndicatorVectors   map[string]IndicatorVector `json:"indicator_vectors"`
+	AuthorityCounters  AuthorityCounters          `json:"authority_counters"`
+	Inventory          Inventory                  `json:"inventory"`
+	Execution          Execution                  `json:"execution"`
+	Performance        Performance                `json:"performance"`
+	OperationalRefuted []OperationalRefutedEvent  `json:"operational_refuted"`
 }
 
 type Metrics struct {
-	SemanticNodes       int `json:"semantic_nodes"`
-	ChangedNodes        int `json:"changed_nodes"`
-	SelectedChecks      int `json:"selected_checks"`
-	ReusableLocks       int `json:"reusable_locks"`
-	InvalidatedLocks    int `json:"invalidated_locks"`
-	UnresolvedNodes     int `json:"unresolved_nodes"`
-	ExecutedChecks      int `json:"executed_checks"`
-	GeneratedArtifacts  int `json:"generated_artifacts"`
+	SemanticNodes      int `json:"semantic_nodes"`
+	ChangedNodes       int `json:"changed_nodes"`
+	SelectedChecks     int `json:"selected_checks"`
+	ReusableLocks      int `json:"reusable_locks"`
+	InvalidatedLocks   int `json:"invalidated_locks"`
+	UnresolvedNodes    int `json:"unresolved_nodes"`
+	ExecutedChecks     int `json:"executed_checks"`
+	GeneratedArtifacts int `json:"generated_artifacts"`
 }
 
 type UnknownFrontier struct {
@@ -104,13 +104,13 @@ type UnknownFrontier struct {
 }
 
 type IndicatorVector struct {
-	SemanticNodes      int `json:"semantic_nodes"`
-	ChangedNodes       int `json:"changed_nodes"`
-	SelectedChecks     int `json:"selected_checks"`
-	ReusableLocks      int `json:"reusable_locks"`
-	InvalidatedLocks   int `json:"invalidated_locks"`
-	UnresolvedNodes    int `json:"unresolved_nodes"`
-	ExecutedChecks     int `json:"executed_checks"`
+	SemanticNodes    int `json:"semantic_nodes"`
+	ChangedNodes     int `json:"changed_nodes"`
+	SelectedChecks   int `json:"selected_checks"`
+	ReusableLocks    int `json:"reusable_locks"`
+	InvalidatedLocks int `json:"invalidated_locks"`
+	UnresolvedNodes  int `json:"unresolved_nodes"`
+	ExecutedChecks   int `json:"executed_checks"`
 }
 
 type AuthorityCounters struct {
@@ -120,24 +120,24 @@ type AuthorityCounters struct {
 }
 
 type Inventory struct {
-	GoooFiles                 int  `json:"gooo_files"`
-	ConformanceCells          int  `json:"conformance_cells"`
-	Activities                int  `json:"activities"`
-	RootReadmeExcluded        bool `json:"root_readme_excluded"`
-	CrossProjectRequiredGates int  `json:"cross_project_required_gates"`
-	LocalValidationCount      int  `json:"local_validation_count"`
-	RuntimeRepositoryWrites   int  `json:"runtime_repository_writes"`
+	GoooFiles                 int    `json:"gooo_files"`
+	ConformanceCells          int    `json:"conformance_cells"`
+	Activities                int    `json:"activities"`
+	RootReadmeExcluded        bool   `json:"root_readme_excluded"`
+	CrossProjectRequiredGates int    `json:"cross_project_required_gates"`
+	LocalValidationCount      int    `json:"local_validation_count"`
+	RuntimeRepositoryWrites   int    `json:"runtime_repository_writes"`
 	TempOutputScope           string `json:"temp_output_scope"`
 }
 
 type Execution struct {
-	Mode                 string `json:"mode"`
+	Mode                  string `json:"mode"`
 	CacheHitsAreExecution bool   `json:"cache_hits_are_execution"`
 }
 
 type Performance struct {
-	Status string  `json:"status"`
-	Reason string  `json:"reason"`
+	Status string   `json:"status"`
+	Reason string   `json:"reason"`
 	WallMS *float64 `json:"wall_ms,omitempty"`
 }
 
@@ -147,7 +147,7 @@ type OperationalRefutedEvent struct {
 }
 
 type Fixture struct {
-	Request  Request        `json:"request"`
+	Request  Request         `json:"request"`
 	Expected FixtureExpected `json:"expected"`
 }
 

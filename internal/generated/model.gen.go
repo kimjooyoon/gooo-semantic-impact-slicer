@@ -2,9 +2,9 @@
 
 package generated
 
-type Rule struct { ID, Domain, Operation, Condition, Outcome string }
-type ConformanceCell struct { ID, Category, Scenario, Focus string }
-type Activity struct { ID, Category, Name string }
+type Rule struct{ ID, Domain, Operation, Condition, Outcome string }
+type ConformanceCell struct{ ID, Category, Scenario, Focus string }
+type Activity struct{ ID, Category, Name string }
 
 var Rules = []Rule{
 	{ID: "R01", Domain: "dependency", Operation: "transitive_dependents", Condition: "changed_or_unknown", Outcome: "select_dependents"},
