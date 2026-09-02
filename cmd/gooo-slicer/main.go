@@ -53,8 +53,8 @@ func planCommand(args []string) error {
 	if *input == "" {
 		return errors.New("plan requires --input")
 	}
-	var req impact.Request
-	if err := readJSON(*input, &req); err != nil {
+	req, err := readRequest(*input)
+	if err != nil {
 		return err
 	}
 	started := time.Now()
@@ -249,6 +249,25 @@ func readJSON(path string, target any) error {
 		return err
 	}
 	return nil
+}
+
+func readRequest(path string) (impact.Request, error) {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return impact.Request{}, err
+	}
+	var request impact.Request
+	if err := json.Unmarshal(data, &request); err != nil {
+		return impact.Request{}, err
+	}
+	if request.Scenario != "" {
+		return request, nil
+	}
+	var fixture impact.Fixture
+	if err := json.Unmarshal(data, &fixture); err != nil {
+		return impact.Request{}, err
+	}
+	return fixture.Request, nil
 }
 
 func writeJSON(value any) error {
