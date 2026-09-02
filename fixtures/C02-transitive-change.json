@@ -1,0 +1,45 @@
+{
+  "request": {
+    "scenario": "transitive-change",
+    "previous": {
+      "toolchain": "go1.27.1",
+      "evaluator": "eval-1",
+      "nodes": [
+        {"id":"base","digest":"b1","deps":[],"authority":"auth","provenance":"prov-base","indicator":"FOUNDATION"},
+        {"id":"middle","digest":"m1","deps":["base"],"authority":"auth","provenance":"prov-middle","indicator":"COHERENCE"},
+        {"id":"leaf","digest":"l1","deps":["middle"],"authority":"auth","provenance":"prov-leaf","indicator":"REGRESSION"}
+      ],
+      "locks": [
+        {"id":"lock-base","node_id":"base","check_id":"check-base","status":"CLOSED","evidence_digest":"ev-base","toolchain":"go1.27.1","evaluator":"eval-1","authority":"auth","provenance":"prov-base"},
+        {"id":"lock-middle","node_id":"middle","check_id":"check-middle","status":"CLOSED","evidence_digest":"ev-middle","toolchain":"go1.27.1","evaluator":"eval-1","authority":"auth","provenance":"prov-middle"},
+        {"id":"lock-leaf","node_id":"leaf","check_id":"check-leaf","status":"CLOSED","evidence_digest":"ev-leaf","toolchain":"go1.27.1","evaluator":"eval-1","authority":"auth","provenance":"prov-leaf"}
+      ]
+    },
+    "candidate": {
+      "toolchain": "go1.27.1",
+      "evaluator": "eval-1",
+      "nodes": [
+        {"id":"base","digest":"b2","deps":[],"authority":"auth","provenance":"prov-base","indicator":"FOUNDATION"},
+        {"id":"middle","digest":"m1","deps":["base"],"authority":"auth","provenance":"prov-middle","indicator":"COHERENCE"},
+        {"id":"leaf","digest":"l1","deps":["middle"],"authority":"auth","provenance":"prov-leaf","indicator":"REGRESSION"}
+      ],
+      "checks": [
+        {"id":"check-base","node_id":"base","cell_id":"C02","indicator":"FOUNDATION"},
+        {"id":"check-middle","node_id":"middle","cell_id":"C02","indicator":"COHERENCE"},
+        {"id":"check-leaf","node_id":"leaf","cell_id":"C02","indicator":"REGRESSION"}
+      ]
+    }
+  },
+  "expected": {
+    "semantic_nodes": 3,
+    "changed_nodes": ["base"],
+    "impacted_nodes": ["base","leaf","middle"],
+    "selected_checks": ["check-base","check-leaf","check-middle"],
+    "reusable_locks": [],
+    "invalidated_locks": ["lock-base","lock-leaf","lock-middle"],
+    "unresolved_nodes": [],
+    "executed_checks": 0,
+    "generated_artifacts": 1,
+    "statuses": {"base":"CLOSED","leaf":"CLOSED","middle":"CLOSED"}
+  }
+}

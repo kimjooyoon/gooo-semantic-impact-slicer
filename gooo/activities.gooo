@@ -1,0 +1,15 @@
+gooo 1
+kind activities
+
+activity A01 category=DRIVER name=detect_changed_nodes
+activity A02 category=DRIVER name=project_transitive_dependents
+activity A03 category=DRIVER name=close_shared_dependency_frontiers
+activity A04 category=DRIVER name=preserve_unknown_dependency_frontiers
+activity A05 category=OUTCOME name=select_required_checks
+activity A06 category=OUTCOME name=reuse_exact_evidence_locks
+activity A07 category=OUTCOME name=invalidate_stale_evidence_locks
+activity A08 category=OUTCOME name=emit_indicator_vectors
+activity A09 category=GUARDRAIL name=selection_never_execution
+activity A10 category=GUARDRAIL name=refuted_unknown_closed_precedence
+activity A11 category=GUARDRAIL name=emit_exact_counts
+activity A12 category=GUARDRAIL name=repository_write_zero

@@ -1,0 +1,32 @@
+{
+  "request": {
+    "scenario": "conflicting-lock",
+    "previous": {
+      "toolchain": "go1.27.1",
+      "evaluator": "eval-1",
+      "nodes": [{"id":"conflict-node","digest":"c1","deps":[],"authority":"auth","provenance":"prov-conflict","indicator":"REGRESSION"}],
+      "locks": [
+        {"id":"lock-conflict-a","node_id":"conflict-node","check_id":"check-conflict","status":"CLOSED","evidence_digest":"ev-one","toolchain":"go1.27.1","evaluator":"eval-1","authority":"auth","provenance":"prov-conflict"},
+        {"id":"lock-conflict-b","node_id":"conflict-node","check_id":"check-conflict","status":"CLOSED","evidence_digest":"ev-two","toolchain":"go1.27.1","evaluator":"eval-1","authority":"auth","provenance":"prov-conflict"}
+      ]
+    },
+    "candidate": {
+      "toolchain": "go1.27.1",
+      "evaluator": "eval-1",
+      "nodes": [{"id":"conflict-node","digest":"c1","deps":[],"authority":"auth","provenance":"prov-conflict","indicator":"REGRESSION"}],
+      "checks": [{"id":"check-conflict","node_id":"conflict-node","cell_id":"C09","indicator":"REGRESSION"}]
+    }
+  },
+  "expected": {
+    "semantic_nodes": 1,
+    "changed_nodes": [],
+    "impacted_nodes": ["conflict-node"],
+    "selected_checks": ["check-conflict"],
+    "reusable_locks": [],
+    "invalidated_locks": ["lock-conflict-a","lock-conflict-b"],
+    "unresolved_nodes": ["conflict-node"],
+    "executed_checks": 0,
+    "generated_artifacts": 1,
+    "statuses": {"conflict-node":"UNKNOWN"}
+  }
+}

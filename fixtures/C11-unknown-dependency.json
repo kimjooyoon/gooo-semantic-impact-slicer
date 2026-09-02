@@ -1,0 +1,45 @@
+{
+  "request": {
+    "scenario": "unknown-dependency",
+    "previous": {
+      "toolchain": "go1.27.1",
+      "evaluator": "eval-1",
+      "nodes": [
+        {"id":"unknown-root","digest":"u1","deps":[],"authority":"auth","provenance":"prov-root","indicator":"FOUNDATION"},
+        {"id":"unknown-consumer","digest":"c1","deps":["unknown-root"],"authority":"auth","provenance":"prov-consumer","indicator":"COHERENCE"},
+        {"id":"unrelated","digest":"x1","deps":[],"authority":"auth","provenance":"prov-unrelated","indicator":"REGRESSION"}
+      ],
+      "locks": [
+        {"id":"lock-root","node_id":"unknown-root","check_id":"check-root","status":"CLOSED","evidence_digest":"ev-root","toolchain":"go1.27.1","evaluator":"eval-1","authority":"auth","provenance":"prov-root"},
+        {"id":"lock-consumer","node_id":"unknown-consumer","check_id":"check-consumer","status":"CLOSED","evidence_digest":"ev-consumer","toolchain":"go1.27.1","evaluator":"eval-1","authority":"auth","provenance":"prov-consumer"},
+        {"id":"lock-unrelated","node_id":"unrelated","check_id":"check-unrelated","status":"CLOSED","evidence_digest":"ev-unrelated","toolchain":"go1.27.1","evaluator":"eval-1","authority":"auth","provenance":"prov-unrelated"}
+      ]
+    },
+    "candidate": {
+      "toolchain": "go1.27.1",
+      "evaluator": "eval-1",
+      "nodes": [
+        {"id":"unknown-root","digest":"u1","deps":["?"],"authority":"auth","provenance":"prov-root","indicator":"FOUNDATION","unknown_dependency":true},
+        {"id":"unknown-consumer","digest":"c1","deps":["unknown-root"],"authority":"auth","provenance":"prov-consumer","indicator":"COHERENCE"},
+        {"id":"unrelated","digest":"x1","deps":[],"authority":"auth","provenance":"prov-unrelated","indicator":"REGRESSION"}
+      ],
+      "checks": [
+        {"id":"check-root","node_id":"unknown-root","cell_id":"C11","indicator":"FOUNDATION"},
+        {"id":"check-consumer","node_id":"unknown-consumer","cell_id":"C11","indicator":"COHERENCE"},
+        {"id":"check-unrelated","node_id":"unrelated","cell_id":"C11","indicator":"REGRESSION"}
+      ]
+    }
+  },
+  "expected": {
+    "semantic_nodes": 3,
+    "changed_nodes": ["unknown-root"],
+    "impacted_nodes": ["unknown-consumer","unknown-root"],
+    "selected_checks": ["check-consumer","check-root"],
+    "reusable_locks": ["lock-unrelated"],
+    "invalidated_locks": ["lock-consumer","lock-root"],
+    "unresolved_nodes": ["unknown-root"],
+    "executed_checks": 0,
+    "generated_artifacts": 1,
+    "statuses": {"unknown-consumer":"CLOSED","unknown-root":"UNKNOWN","unrelated":"CLOSED"}
+  }
+}

@@ -1,0 +1,41 @@
+name: Format implementation branch
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    if: startsWith(github.ref, 'refs/heads/implementation/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out implementation branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Set up Go 1.27.x
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.27.x
+          check-latest: true
+
+      - name: Generate and format in Actions
+        run: |
+          go generate ./...
+          gofmt -w $(find . -name '*.go' -not -path './.git/*')
+
+      - name: Commit formatting only when needed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet; then
+            exit 0
+          fi
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add -- '*.go'
+          git commit -m 'chore: normalize generated Go projection and formatting'
+          git push origin "HEAD:${GITHUB_REF_NAME}"

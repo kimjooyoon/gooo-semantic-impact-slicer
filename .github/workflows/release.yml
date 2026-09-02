@@ -1,0 +1,70 @@
+name: Gooo immutable draft release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  draft-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out annotated tag
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go 1.27.x
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.27.x
+          check-latest: true
+
+      - name: Re-project and validate release revision
+        run: |
+          go generate ./...
+          git diff --exit-code -- internal/generated/model.gen.go
+          test -z "$(gofmt -l $(find . -name '*.go' -not -path './.git/*'))"
+          go build ./...
+          go vet ./...
+          go test ./...
+
+      - name: Run conformance and replay before creating release
+        run: |
+          mkdir -p release-artifacts
+          go run ./cmd/gooo-slicer conformance --fixtures fixtures > release-artifacts/conformance.json
+          go run ./cmd/gooo-slicer replay --fixtures fixtures > release-artifacts/replay.json
+          go run ./cmd/gooo-slicer plan --input fixtures/C10-no-op-candidate.json > release-artifacts/no-op-plan.json
+          sha256sum release-artifacts/*.json | sort > release-artifacts/SHA256SUMS
+
+      - name: Create draft release first
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            --draft \
+            --title "Gooo semantic impact slicer ${GITHUB_REF_NAME}" \
+            --notes "Immutable annotated release. The planner is selection-only: executed_checks remains 0, unknown frontiers remain explicit, and no performance improvement is claimed without an exact same-scenario/toolchain/evaluator pair."
+
+      - name: Package immutable source asset
+        run: |
+          git archive --format=tar.gz --prefix="gooo-semantic-impact-slicer-${GITHUB_REF_NAME}/" "${GITHUB_SHA}" > "gooo-semantic-impact-slicer-${GITHUB_REF_NAME}.tar.gz"
+          sha256sum "gooo-semantic-impact-slicer-${GITHUB_REF_NAME}.tar.gz" > "gooo-semantic-impact-slicer-${GITHUB_REF_NAME}.tar.gz.sha256"
+
+      - name: Upload release assets without replacement
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload "${GITHUB_REF_NAME}" \
+            "gooo-semantic-impact-slicer-${GITHUB_REF_NAME}.tar.gz" \
+            "gooo-semantic-impact-slicer-${GITHUB_REF_NAME}.tar.gz.sha256" \
+            release-artifacts/SHA256SUMS
+
+      - name: Upload release reports as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gooo-release-reports-${{ github.ref_name }}
+          path: release-artifacts
+          if-no-files-found: error

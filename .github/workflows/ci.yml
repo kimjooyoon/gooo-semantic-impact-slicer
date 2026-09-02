@@ -1,0 +1,61 @@
+name: Gooo semantic impact slicer CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out pinned revision
+        uses: actions/checkout@v4
+
+      - name: Set up Go 1.27.x
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.27.x
+          check-latest: true
+
+      - name: Project Gooo sources
+        run: go generate ./...
+
+      - name: Reject stale generated projection
+        run: git diff --exit-code -- internal/generated/model.gen.go
+
+      - name: Enforce formatting
+        run: test -z "$(gofmt -l $(find . -name '*.go' -not -path './.git/*'))"
+
+      - name: Build
+        run: go build ./...
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Test
+        run: go test ./...
+
+      - name: Run exact conformance corpus
+        run: |
+          mkdir -p artifacts
+          go run ./cmd/gooo-slicer conformance --fixtures fixtures > artifacts/conformance.json
+
+      - name: Replay exact conformance corpus
+        run: go run ./cmd/gooo-slicer replay --fixtures fixtures > artifacts/replay.json
+
+      - name: Produce selection-only sample
+        run: go run ./cmd/gooo-slicer plan --input fixtures/C10-no-op-candidate.json > artifacts/no-op-plan.json
+
+      - name: Hash reports
+        run: sha256sum artifacts/*.json | sort > artifacts/SHA256SUMS
+
+      - name: Upload inspectable reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: gooo-slicer-reports-${{ github.sha }}
+          path: artifacts
+          if-no-files-found: error

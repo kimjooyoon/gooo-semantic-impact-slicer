@@ -1,0 +1,29 @@
+{
+  "request": {
+    "scenario": "missing-provenance",
+    "previous": {
+      "toolchain": "go1.27.1",
+      "evaluator": "eval-1",
+      "nodes": [{"id":"evidence-node","digest":"e1","deps":[],"authority":"auth","provenance":"prov-node","indicator":"COHERENCE"}],
+      "locks": [{"id":"lock-evidence","node_id":"evidence-node","check_id":"check-evidence","status":"CLOSED","evidence_digest":"ev-node","toolchain":"go1.27.1","evaluator":"eval-1","authority":"auth","provenance":"prov-node"}]
+    },
+    "candidate": {
+      "toolchain": "go1.27.1",
+      "evaluator": "eval-1",
+      "nodes": [{"id":"evidence-node","digest":"e1","deps":[],"authority":"auth","provenance":"","indicator":"COHERENCE"}],
+      "checks": [{"id":"check-evidence","node_id":"evidence-node","cell_id":"C05","indicator":"COHERENCE"}]
+    }
+  },
+  "expected": {
+    "semantic_nodes": 1,
+    "changed_nodes": ["evidence-node"],
+    "impacted_nodes": ["evidence-node"],
+    "selected_checks": ["check-evidence"],
+    "reusable_locks": [],
+    "invalidated_locks": ["lock-evidence"],
+    "unresolved_nodes": ["evidence-node"],
+    "executed_checks": 0,
+    "generated_artifacts": 1,
+    "statuses": {"evidence-node":"UNKNOWN"}
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "request": {
+    "scenario": "refuted-precedence",
+    "previous": {
+      "toolchain": "go1.27.1",
+      "evaluator": "eval-1",
+      "nodes": [{"id":"precedence-node","digest":"p1","deps":[],"authority":"auth","provenance":"prov-precedence","indicator":"REGRESSION"}],
+      "locks": [
+        {"id":"lock-closed","node_id":"precedence-node","check_id":"check-precedence","status":"CLOSED","evidence_digest":"ev-same","toolchain":"go1.27.1","evaluator":"eval-1","authority":"auth","provenance":"prov-precedence"},
+        {"id":"lock-unknown","node_id":"precedence-node","check_id":"check-precedence","status":"UNKNOWN","evidence_digest":"ev-same","toolchain":"go1.27.1","evaluator":"eval-1","authority":"auth","provenance":"prov-precedence"},
+        {"id":"lock-refuted","node_id":"precedence-node","check_id":"check-precedence","status":"REFUTED","evidence_digest":"ev-same","toolchain":"go1.27.1","evaluator":"eval-1","authority":"auth","provenance":"prov-precedence"}
+      ]
+    },
+    "candidate": {
+      "toolchain": "go1.27.1",
+      "evaluator": "eval-1",
+      "nodes": [{"id":"precedence-node","digest":"p1","deps":[],"authority":"auth","provenance":"prov-precedence","indicator":"REGRESSION"}],
+      "checks": [{"id":"check-precedence","node_id":"precedence-node","cell_id":"C12","indicator":"REGRESSION"}]
+    }
+  },
+  "expected": {
+    "semantic_nodes": 1,
+    "changed_nodes": [],
+    "impacted_nodes": ["precedence-node"],
+    "selected_checks": ["check-precedence"],
+    "reusable_locks": [],
+    "invalidated_locks": ["lock-closed","lock-refuted","lock-unknown"],
+    "unresolved_nodes": ["precedence-node"],
+    "executed_checks": 0,
+    "generated_artifacts": 1,
+    "statuses": {"precedence-node":"REFUTED"}
+  }
+}

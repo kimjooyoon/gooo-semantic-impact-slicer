@@ -1,0 +1,49 @@
+{
+  "request": {
+    "scenario": "shared-dependency",
+    "previous": {
+      "toolchain": "go1.27.1",
+      "evaluator": "eval-1",
+      "nodes": [
+        {"id":"shared","digest":"s1","deps":[],"authority":"auth","provenance":"prov-shared","indicator":"FOUNDATION"},
+        {"id":"left","digest":"l1","deps":["shared"],"authority":"auth","provenance":"prov-left","indicator":"COHERENCE"},
+        {"id":"right","digest":"r1","deps":["shared"],"authority":"auth","provenance":"prov-right","indicator":"REGRESSION"},
+        {"id":"isolated","digest":"i1","deps":[],"authority":"auth","provenance":"prov-isolated","indicator":"GUARDRAIL"}
+      ],
+      "locks": [
+        {"id":"lock-shared","node_id":"shared","check_id":"check-shared","status":"CLOSED","evidence_digest":"ev-shared","toolchain":"go1.27.1","evaluator":"eval-1","authority":"auth","provenance":"prov-shared"},
+        {"id":"lock-left","node_id":"left","check_id":"check-left","status":"CLOSED","evidence_digest":"ev-left","toolchain":"go1.27.1","evaluator":"eval-1","authority":"auth","provenance":"prov-left"},
+        {"id":"lock-right","node_id":"right","check_id":"check-right","status":"CLOSED","evidence_digest":"ev-right","toolchain":"go1.27.1","evaluator":"eval-1","authority":"auth","provenance":"prov-right"},
+        {"id":"lock-isolated","node_id":"isolated","check_id":"check-isolated","status":"CLOSED","evidence_digest":"ev-isolated","toolchain":"go1.27.1","evaluator":"eval-1","authority":"auth","provenance":"prov-isolated"}
+      ]
+    },
+    "candidate": {
+      "toolchain": "go1.27.1",
+      "evaluator": "eval-1",
+      "nodes": [
+        {"id":"shared","digest":"s2","deps":[],"authority":"auth","provenance":"prov-shared","indicator":"FOUNDATION"},
+        {"id":"left","digest":"l1","deps":["shared"],"authority":"auth","provenance":"prov-left","indicator":"COHERENCE"},
+        {"id":"right","digest":"r1","deps":["shared"],"authority":"auth","provenance":"prov-right","indicator":"REGRESSION"},
+        {"id":"isolated","digest":"i1","deps":[],"authority":"auth","provenance":"prov-isolated","indicator":"GUARDRAIL"}
+      ],
+      "checks": [
+        {"id":"check-shared","node_id":"shared","cell_id":"C03","indicator":"FOUNDATION"},
+        {"id":"check-left","node_id":"left","cell_id":"C03","indicator":"COHERENCE"},
+        {"id":"check-right","node_id":"right","cell_id":"C03","indicator":"REGRESSION"},
+        {"id":"check-isolated","node_id":"isolated","cell_id":"C03","indicator":"GUARDRAIL"}
+      ]
+    }
+  },
+  "expected": {
+    "semantic_nodes": 4,
+    "changed_nodes": ["shared"],
+    "impacted_nodes": ["left","right","shared"],
+    "selected_checks": ["check-left","check-right","check-shared"],
+    "reusable_locks": ["lock-isolated"],
+    "invalidated_locks": ["lock-left","lock-right","lock-shared"],
+    "unresolved_nodes": [],
+    "executed_checks": 0,
+    "generated_artifacts": 1,
+    "statuses": {"isolated":"CLOSED","left":"CLOSED","right":"CLOSED","shared":"CLOSED"}
+  }
+}
