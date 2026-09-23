@@ -3,7 +3,6 @@ package main
 import (
 	"crypto/sha256"
 	"encoding/hex"
-	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
@@ -245,7 +244,7 @@ func readJSON(path string, target any) error {
 	if err != nil {
 		return err
 	}
-	if err := json.Unmarshal(data, target); err != nil {
+	if err := strictJSONUnmarshal(data, target); err != nil {
 		return err
 	}
 	return nil
@@ -257,14 +256,14 @@ func readRequest(path string) (impact.Request, error) {
 		return impact.Request{}, err
 	}
 	var request impact.Request
-	if err := json.Unmarshal(data, &request); err != nil {
+	if err := strictJSONUnmarshal(data, &request); err != nil {
 		return impact.Request{}, err
 	}
 	if request.Scenario != "" {
 		return request, nil
 	}
 	var fixture impact.Fixture
-	if err := json.Unmarshal(data, &fixture); err != nil {
+	if err := strictJSONUnmarshal(data, &fixture); err != nil {
 		return impact.Request{}, err
 	}
 	return fixture.Request, nil
