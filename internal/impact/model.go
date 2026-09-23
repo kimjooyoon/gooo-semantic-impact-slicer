@@ -207,10 +207,15 @@ func validateRequest(req Request) error {
 	if err := validateChecks(req.Candidate); err != nil {
 		return err
 	}
+	lockIDs := map[string]bool{}
 	for _, lock := range req.Previous.Locks {
 		if strings.TrimSpace(lock.ID) == "" || strings.TrimSpace(lock.NodeID) == "" || strings.TrimSpace(lock.CheckID) == "" {
 			return fmt.Errorf("previous locks require id, node_id, and check_id")
 		}
+		if lockIDs[lock.ID] {
+			return fmt.Errorf("previous locks contain duplicate id %s", lock.ID)
+		}
+		lockIDs[lock.ID] = true
 		if status := normalizeStatus(lock.Status); status != StatusClosed && status != StatusUnknown && status != StatusRefuted {
 			return fmt.Errorf("previous lock %s has invalid status %q", lock.ID, lock.Status)
 		}
