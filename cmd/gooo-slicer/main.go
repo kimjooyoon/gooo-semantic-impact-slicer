@@ -1,12 +1,14 @@
 package main
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -245,10 +247,7 @@ func readJSON(path string, target any) error {
 	if err != nil {
 		return err
 	}
-	if err := json.Unmarshal(data, target); err != nil {
-		return err
-	}
-	return nil
+	return decodeJSON(data, target)
 }
 
 func readRequest(path string) (impact.Request, error) {
@@ -256,18 +255,38 @@ func readRequest(path string) (impact.Request, error) {
 	if err != nil {
 		return impact.Request{}, err
 	}
+	var root map[string]json.RawMessage
+	if err := decodeJSON(data, &root); err != nil {
+		return impact.Request{}, err
+	}
+	if _, wrapped := root["request"]; wrapped {
+		var fixture impact.Fixture
+		if err := decodeJSON(data, &fixture); err != nil {
+			return impact.Request{}, err
+		}
+		return fixture.Request, nil
+	}
 	var request impact.Request
-	if err := json.Unmarshal(data, &request); err != nil {
+	if err := decodeJSON(data, &request); err != nil {
 		return impact.Request{}, err
 	}
-	if request.Scenario != "" {
-		return request, nil
+	return request, nil
+}
+
+func decodeJSON(data []byte, target any) error {
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(target); err != nil {
+		return err
 	}
-	var fixture impact.Fixture
-	if err := json.Unmarshal(data, &fixture); err != nil {
-		return impact.Request{}, err
+	var trailing any
+	if err := decoder.Decode(&trailing); err != io.EOF {
+		if err == nil {
+			return errors.New("trailing JSON value")
+		}
+		return fmt.Errorf("trailing JSON data: %w", err)
 	}
-	return fixture.Request, nil
+	return nil
 }
 
 func writeJSON(value any) error {
