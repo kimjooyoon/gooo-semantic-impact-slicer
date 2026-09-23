@@ -118,6 +118,20 @@ func TestInventoryAndAuthorityCounters(t *testing.T) {
 	}
 }
 
+func TestRejectsDuplicateEvidenceLockIDs(t *testing.T) {
+	req := Request{
+		Scenario: "duplicate-lock-id",
+		Previous: Snapshot{Locks: []EvidenceLock{
+			{ID: "lock-1", NodeID: "node-a", CheckID: "check-a", Status: StatusClosed},
+			{ID: "lock-1", NodeID: "node-a", CheckID: "check-b", Status: StatusClosed},
+		}},
+		Candidate: Snapshot{Nodes: []Node{{ID: "node-a", Digest: "digest-a", Provenance: "source-a"}}},
+	}
+	if _, err := Plan(req); err == nil {
+		t.Fatal("expected duplicate evidence lock IDs to be rejected")
+	}
+}
+
 func assertFixture(report Report, expected FixtureExpected) error {
 	actualUnresolved := make([]string, 0, len(report.Unresolved))
 	for _, item := range report.Unresolved {
